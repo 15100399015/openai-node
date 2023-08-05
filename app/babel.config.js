@@ -26,16 +26,22 @@ module.exports = {
         "corejs": 3
       }
     ],
+    [
+      "@babel/preset-react",
+      {
+        "runtime": "automatic", // defaults to classic
+        "development": process.env.BABEL_ENV === "development",
+      }
+    ],
     "@babel/preset-typescript",
-    "@babel/preset-react",
   ],
   "plugins": [
     isDEV && require.resolve("react-refresh/babel"),
     ["@babel/plugin-proposal-decorators", { "legacy": true }],
-		["import", {
-			"libraryName": "antd",
-			"libraryDirectory": "es",
-			"style": true
-		}]
+    ["import", {
+      "libraryName": "antd",
+      "libraryDirectory": "es",
+      "style": true
+    }]
   ].filter(Boolean)
 };

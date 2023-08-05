@@ -18,7 +18,6 @@
 import React from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import routes from "./routes";
-window.React = React
 
 const router = createHashRouter(routes);
 

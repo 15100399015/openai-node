@@ -147,6 +147,9 @@ module.exports = {
       template: appHtml,
       inject: true,
     }),
+    new webpack.ProvidePlugin({
+      React: "React"
+    }),
     new webpack.DefinePlugin({
       "process.env": JSON.stringify({
         ...envVariate.filter(isDev, process.env),
