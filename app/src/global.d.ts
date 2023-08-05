@@ -14,19 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import React from "react";
 
-// 这里要使用 global 关键字，因为文件中使用了import语句所以此文件会被认为是一个模块，在模块中使用 declare 声明默认并不是全局的
-// 反之如果没有使用import语句就不会被识别为模块文件，则使用 declare global 和 declare 是没有区别的
 declare global {
-	declare module "*.css";
-	declare module "*.less";
-	declare module "*.png";
-	declare module "*.svg?asset";
-	declare module "*.svg" {
-		export default function ReactComponent(
-			props: React.SVGProps<SVGSVGElement>,
-		): React.ReactElement;
-	}
+  declare module "*.css";
+  declare module "*.less";
+  declare module "*.png";
+  declare module "*.svg?asset";
+  declare module "*.svg" {
+    export default function ReactComponent(
+      props: React.SVGProps<SVGSVGElement>
+    ): React.ReactElement;
+  }
 }
