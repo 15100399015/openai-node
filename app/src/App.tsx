@@ -15,16 +15,28 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useEffect } from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import routes from "./routes";
+import axios from "axios";
+import { connectEventSocket } from "./service/eventSocket";
 import "@/globals.css";
-
 
 const router = createHashRouter(routes);
 
 function App() {
-	return <RouterProvider router={router} />;
+  const [login, setLogin] = React.useState(false);
+  useEffect(() => {
+    axios.post("/api/login").then(() => {
+      setLogin(true);
+      connectEventSocket();
+    });
+  }, []);
+  if (login) {
+    return <RouterProvider router={router} />;
+  } else {
+    return null;
+  }
 }
 
 export default App;
