@@ -26,8 +26,7 @@ import {
 } from "@/types/eventbus";
 
 import { SolidViewDataType } from "@/types/solid";
-import Apis from "@/apis";
-import { ApiResult } from "@/types";
+import { dataSourceData } from "@/apis/data/dataSource";
 
 export interface SolidViewProps {
   id: string;
@@ -125,15 +124,8 @@ export default abstract class SolidView<
       this.dataSheet = viewModel.data.dataset || [];
       return;
     }
-
-    this.dataSheet = [
-      ["name", "val"],
-      ["n1", "10"],
-      ["n2", "30"],
-      ["n3", "60"],
-      ["n4", "100"],
-      ["n5", "120"],
-    ];
+    // @ts-ignore
+    this.dataSheet = dataSourceData[dsId];
   };
 
   async componentDidMount() {

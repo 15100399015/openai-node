@@ -1,7 +1,5 @@
 import { nanoid } from "@/lib/utils";
 import { Chat } from "@/chatComponents/chat";
-
-import '@/globals.css'
 import { TailwindIndicator } from '@/chatComponents/tailwind-indicator'
 import { Providers } from '@/chatComponents/providers'
 import { Header } from '@/chatComponents/header'

@@ -18,6 +18,8 @@
 import React from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import routes from "./routes";
+import "@/globals.css";
+
 
 const router = createHashRouter(routes);
 

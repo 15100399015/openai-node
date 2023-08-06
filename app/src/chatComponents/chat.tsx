@@ -8,7 +8,6 @@ import { ChatPanel } from "@/chatComponents/chat-panel";
 import { EmptyScreen } from "@/chatComponents/empty-screen";
 import { ChatScrollAnchor } from "@/chatComponents/chat-scroll-anchor";
 import { toast } from "react-hot-toast";
-import { EventSocketPanel } from "@/chatComponents/event-socket-panel";
 
 export interface ChatProps extends React.ComponentProps<"div"> {
   initialMessages?: Message[];
@@ -27,7 +26,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       body: {
         id,
       },
-      onResponse(response) {
+      onResponse(response: any) {
         if (response.status === 401) {
           toast.error(response.statusText);
         }
@@ -35,7 +34,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     });
   return (
     <>
-      <div className={cn("pb-[200px] pt-4 md:pt-10", className)}>
+      <div className={cn("pb-[200px] pt-4 md:pt-10 ", className)}>
         {messages.length ? (
           <>
             <ChatList messages={messages} />
@@ -45,7 +44,6 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
           <EmptyScreen />
         )}
       </div>
-      <EventSocketPanel />
       <ChatPanel
         id={id}
         isLoading={isLoading}

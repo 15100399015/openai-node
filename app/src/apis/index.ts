@@ -108,8 +108,6 @@ const datasource = {
 		ApiService.get<T>(`/solidui/datasource/key/type/${typeId}`),
 	delete: <T>(id: string) =>
 		ApiService.delete<T>(`/solidui/datasource/info/delete/${id}`),
-	// update: <T>(id: string, params: any) =>
-	// ApiService.put(`/solidui/datasources/${id}/info`, params),
 	update: <T>(id: string, params: any) =>
 		ApiService.put<T>(`/solidui/datasource/info/${id}/json`, params),
 	create: <T>(params: DataSourceCreationDataType) =>

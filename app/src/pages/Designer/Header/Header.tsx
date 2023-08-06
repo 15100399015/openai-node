@@ -31,53 +31,7 @@ import { isNil, startsWith } from "lodash-es";
 function Header() {
 	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
-	const [previewVisible, setPreviewVisible] = React.useState(false);
 	const [title, setTitle] = React.useState("");
-
-	function renderPreviewPopup() {
-		if (!previewVisible) {
-			return undefined;
-		}
-
-		return (
-			<Drawer
-				title=""
-				placement="top"
-				closable
-				onClose={() => {}}
-				open={previewVisible}
-				key="top"
-				footer={undefined}
-				height="100vh"
-			>
-				<div
-					style={{
-						position: "absolute",
-						top: 5,
-						right: 5,
-						width: 24,
-						height: 24,
-						zIndex: 1000,
-					}}
-				>
-					<Button
-						style={{
-							background: "red",
-							fontSize: 12,
-							color: "#fff",
-							border: "1px solid red",
-						}}
-						size="small"
-						onClick={() => {
-							setPreviewVisible(false);
-						}}
-					>
-						X
-					</Button>
-				</div>
-			</Drawer>
-		);
-	}
 
 	function renderHome() {
 		navigate("/");
@@ -133,24 +87,6 @@ function Header() {
 					<Button
 						type="primary"
 						size="small"
-						style={{
-							marginRight: 10,
-						}}
-						onClick={() => {
-							const page = mm.getCurrentPage();
-							const project = mm.getModel();
-							if (isNil(project) || isNil(page)) {
-								message.warn("please select a page first");
-								return;
-							}
-							setPreviewVisible(true);
-						}}
-					>
-						Preview
-					</Button>
-					<Button
-						type="primary"
-						size="small"
 						onClick={async () => {
 							const model = mm.getPrepareSavingModel();
 							const page = mm.getCurrentPage();
@@ -201,6 +137,7 @@ function Header() {
 								},
 								views: _views,
 							};
+							return
 							const res = await Apis.model.updateProjectPageViews(data);
 							if (res.ok) {
 								message.success("Save success");
@@ -211,7 +148,6 @@ function Header() {
 					</Button>
 				</div>
 			</div>
-			{renderPreviewPopup()}
 		</header>
 	);
 }

@@ -22,6 +22,12 @@ import { find, isNil, cloneDeep } from "lodash-es";
 import Apis from "@/apis";
 import { ApiResult, DataSourceTypeDataType, DataSourceDataType } from "@/types";
 import { eventbus, mm } from "@/utils";
+import {
+  dataSourceData,
+  dataSourceList,
+  dataSourceTable,
+  dataSourceTypeList,
+} from "@/apis/data/dataSource";
 
 interface Option {
   key: string;
@@ -47,6 +53,7 @@ function useDataProperties() {
   >([]);
 
   const [selectedDataSource, setSelectedDataSource] = useState<{
+    dataSourceId: string;
     dataSourceName: string;
     typeName: string;
   }>();
@@ -65,64 +72,53 @@ function useDataProperties() {
       sql: undefined,
     };
 
-    const res: ApiResult<DataSourceTypeDataType[]> =
-      await Apis.datasource.types();
-    if (res.ok) {
-      const mDataSourceTypes = res.data || [];
-      const res2: ApiResult<DataSourceDataType> = await Apis.datasource.query({
-        pageNo: 1,
-        pageSize: 10000,
-        expire: false,
-        name: "",
+    const mDataSourceTypes = dataSourceTypeList || [];
+
+    const data = dataSourceList || ({} as any);
+    const records: DataSourceDataType[] = data.totalList || [];
+    const mDataSourceOptions: Option[] = [];
+    records.forEach((item: any) => {
+      mDataSourceOptions.push({
+        key: `${item.id}`,
+        label: item.dataSourceName,
+        value: item.id,
+        isLeaf: false,
+        children: [],
       });
-      if (res2.ok) {
-        const data = res2.data || ({} as any);
-        const records: DataSourceDataType[] = data.totalList || [];
-        const mDataSourceOptions: Option[] = [];
-        records.forEach((item: any) => {
-          // item.key = item.id;
-          mDataSourceOptions.push({
-            key: `${item.id}`,
-            label: item.dataSourceName,
-            value: item.id,
-            isLeaf: false,
-            children: [],
-          });
-        });
+    });
 
-        setDataSourceOptions(mDataSourceOptions);
-        setDataSourceTypes(mDataSourceTypes);
-        setDataSources(records || []);
-        setColumns([]);
-        setRows([]);
-        const optionVals = [];
-        if (viewData.dataSourceId) {
-          optionVals.push(viewData.dataSourceId);
-        }
-        if (viewData.table) {
-          optionVals.push(viewData.table);
-        }
-        setSelectedDataSourceOptions(optionVals);
-
-        const target = find(records, (d) => d.id === viewData.dataSourceId);
-        if (target === null || undefined === target) {
-          setLoading(false);
-          return;
-        }
-        const dsType = find(
-          mDataSourceTypes,
-          (d) => d.id === `${target?.dataSourceTypeId}`
-        );
-        if (dsType === null || undefined === dsType) {
-          setLoading(false);
-          return;
-        }
-        setSelectedDataSource({
-          dataSourceName: target.dataSourceName,
-          typeName: dsType.classifier,
-        });
-      }
+    setDataSourceOptions(mDataSourceOptions);
+    setDataSourceTypes(mDataSourceTypes);
+    setDataSources(records || []);
+    setColumns([]);
+    setRows([]);
+    const optionVals = [];
+    if (viewData.dataSourceId) {
+      optionVals.push(viewData.dataSourceId);
     }
+    if (viewData.table) {
+      optionVals.push(viewData.table);
+    }
+    setSelectedDataSourceOptions(optionVals);
+
+    const target = find(records, (d) => d.id === viewData.dataSourceId);
+    if (target === null || undefined === target) {
+      setLoading(false);
+      return;
+    }
+    const dsType = find(
+      mDataSourceTypes,
+      (d) => d.id === `${target?.dataSourceTypeId}`
+    );
+    if (dsType === null || undefined === dsType) {
+      setLoading(false);
+      return;
+    }
+    setSelectedDataSource({
+      dataSourceId: target.id,
+      dataSourceName: target.dataSourceName,
+      typeName: dsType.classifier,
+    });
     setLoading(false);
   });
 
@@ -151,40 +147,36 @@ function useDataProperties() {
       return;
     }
     dsTypeIdRef.current = `${target?.dataSourceTypeId}`;
-    const res: ApiResult<any> = await Apis.datasource.dbs({
+    // @ts-ignore
+    const data = dataSourceTable[target.id];
+    const records = data || [];
+    const dsOptions = cloneDeep(dataSourceOptions);
+    const targetDsOption = find(dsOptions, (ds) => ds.value === id);
+    records.forEach((item: any) => {
+      targetDsOption?.children.push({
+        key: item,
+        label: item,
+        value: item,
+        isLeaf: true,
+        children: [],
+      });
+    });
+
+    /// / dataSourceId
+    const currentView = mm.getCurrentView();
+    if (!isNil(currentView)) {
+      currentView.data.dataSourceId = id;
+      currentView.data.dataSourceName = target.dataSourceName;
+      currentView.data.dataSourceTypeId = dsTypeIdRef.current;
+      currentView.data.dataSourceTypeName = dsType.name;
+    }
+
+    setDataSourceOptions(dsOptions);
+    setSelectedDataSource({
+      dataSourceId: target.id,
       dataSourceName: target.dataSourceName,
       typeName: dsType.classifier,
     });
-    if (res.ok) {
-      const data = res.data || ({} as any);
-      const records = data || [];
-      const dsOptions = cloneDeep(dataSourceOptions);
-      const targetDsOption = find(dsOptions, (ds) => ds.value === id);
-      records.forEach((item: any) => {
-        targetDsOption?.children.push({
-          key: item,
-          label: item,
-          value: item,
-          isLeaf: true,
-          children: [],
-        });
-      });
-
-      /// / dataSourceId
-      const currentView = mm.getCurrentView();
-      if (!isNil(currentView)) {
-        currentView.data.dataSourceId = id;
-        currentView.data.dataSourceName = target.dataSourceName;
-        currentView.data.dataSourceTypeId = dsTypeIdRef.current;
-        currentView.data.dataSourceTypeName = dsType.name;
-      }
-
-      setDataSourceOptions(dsOptions);
-      setSelectedDataSource({
-        dataSourceName: target.dataSourceName,
-        typeName: dsType.classifier,
-      });
-    }
   }
 
   async function querySql() {
@@ -196,15 +188,8 @@ function useDataProperties() {
     if (isNil(selectedDataSource)) {
       return;
     }
-
-    const mData = [
-      ["name", "val"],
-      ["n1", "10"],
-      ["n2", "30"],
-      ["n3", "60"],
-      ["n4", "100"],
-      ["n5", "120"],
-    ];
+    // @ts-ignore
+    const mData = dataSourceData[selectedDataSource.dataSourceId];
     const originData = cloneDeep(mData);
     if (mData.length > 0) {
       const mColumns = mData.shift();

@@ -80,7 +80,7 @@ function usePageProperties(initialData: InitialData) {
 		const dom = document.getElementById("section-properties");
 		if (dom) {
 			if (key === "Modelui") {
-				dom.style.width = "800px";
+				dom.style.width = "600px";
 			} else {
 				dom.style.width = "326px";
 			}
