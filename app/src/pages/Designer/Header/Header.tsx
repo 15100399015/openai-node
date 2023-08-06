@@ -17,139 +17,133 @@
 
 import React, { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Button, Tooltip, Drawer, message } from "antd";
+import { Button, Tooltip } from "antd";
 import { ChartHistogramTwo } from "@icon-park/react";
 import { eventbus, mm } from "@/utils/index";
-import Apis from "@/apis";
 import {
-	ProjectPageViewsCreationDataType,
-	PageViewCreationDataType,
+  ProjectPageViewsCreationDataType,
+  PageViewCreationDataType,
 } from "@/apis/types";
 import "./header.less";
 import { isNil, startsWith } from "lodash-es";
 
 function Header() {
-	const navigate = useNavigate();
-	const [searchParams] = useSearchParams();
-	const [title, setTitle] = React.useState("");
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [title, setTitle] = React.useState("");
 
-	function renderHome() {
-		navigate("/");
-	}
+  function renderHome() {
+    navigate("/");
+  }
 
-	useEffect(() => {
-		const projectName = searchParams.get("projectName");
-		if (projectName !== null) {
-			setTitle(projectName);
-		}
-	}, [searchParams]);
+  useEffect(() => {
+    const projectName = searchParams.get("projectName");
+    if (projectName !== null) {
+      setTitle(projectName);
+    }
+  }, [searchParams]);
 
-	const vars: Record<string, any> = {};
-	Object.keys(process.env).forEach((key) => {
-		vars[key] = process.env[key];
-	});
+  const vars: Record<string, any> = {};
+  Object.keys(process.env).forEach((key) => {
+    vars[key] = process.env[key];
+  });
 
-	return (
-		<header className="header">
-			<div className="header-main">
-				<div className="header-left">
-					<div className="logo" onClick={renderHome} />
-					<div className="logo-text" onClick={renderHome}>
-						{/* SolidUI */}
-						{vars.APP_NAME || "SolidUI"}
-					</div>
-					<div className="version">v{vars.APP_VERSION || "0.2.0"}</div>
-					<div className="split-line" />
-					<div className="left-main">
-						<span style={{ marginLeft: "10px" }}>{title}</span>
-					</div>
-				</div>
-				<div className="header-center">
-					<Tooltip title="Bar Chart">
-						<ChartHistogramTwo
-							theme="two-tone"
-							size="32"
-							fill={["#379aff", "#4890f3"]}
-							strokeLinejoin="bevel"
-							strokeLinecap="square"
-							style={{
-								cursor: "pointer",
-							}}
-							onClick={() => {
-								eventbus.emit("onDraw", {
-									viewType: "echarts_bar",
-								});
-							}}
-						/>
-					</Tooltip>
-				</div>
-				<div className="header-right">
-					<Button
-						type="primary"
-						size="small"
-						onClick={async () => {
-							const model = mm.getPrepareSavingModel();
-							const page = mm.getCurrentPage();
+  return (
+    <header className="header">
+      <div className="header-main">
+        <div className="header-left">
+          <div className="logo" onClick={renderHome} />
+          <div className="logo-text" onClick={renderHome}>
+            {/* SolidUI */}
+            {vars.APP_NAME || "SolidUI"}
+          </div>
+          <div className="version">v{vars.APP_VERSION || "0.2.0"}</div>
+          <div className="split-line" />
+          <div className="left-main">
+            <span style={{ marginLeft: "10px" }}>{title}</span>
+          </div>
+        </div>
+        <div className="header-center">
+          <Tooltip title="Bar Chart">
+            <ChartHistogramTwo
+              theme="two-tone"
+              size="32"
+              fill={["#379aff", "#4890f3"]}
+              strokeLinejoin="bevel"
+              strokeLinecap="square"
+              style={{
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                eventbus.emit("onDraw", {
+                  viewType: "echarts_bar",
+                });
+              }}
+            />
+          </Tooltip>
+        </div>
+        <div className="header-right">
+          <Button
+            size="small"
+            onClick={async () => {
+              const model = mm.getPrepareSavingModel();
+              const page = mm.getCurrentPage();
 
-							if (isNil(model) || isNil(page)) {
-								return;
-							}
-							const views = page.views || [];
-							const _views: PageViewCreationDataType[] = [];
-							views.forEach((view) => {
-								const v: any = {
-									title: view.title,
-									position: {
-										top: `${view.position.top}`,
-										left: `${view.position.left}`,
-									},
-									size: {
-										width: `${view.size.width}`,
-										height: `${view.size.height}`,
-									},
-									type: view.type,
-									data: {
-										dataSourceId: `${view.data.dataSourceId || ""}`,
-										dataSourceName: `${view.data.dataSourceName || ""}`,
-										dataSourceTypeId: `${view.data.dataSourceTypeId || ""}`,
-										dataSourceTypeName: `${view.data.dataSourceTypeName || ""}`,
-										sql: view.data.sql || "",
-										table: view.data.table || "",
-									},
-								};
-								if (view.options !== null && undefined !== view.options) {
-									v.options = view.options;
-								}
-								if (!startsWith(view.id, "visual")) {
-									v.id = view.id;
-								}
-								_views.push(v);
-							});
-							const data: ProjectPageViewsCreationDataType = {
-								projectId: model.id,
-								page: {
-									id: page.id,
-									name: page.title,
-								},
-								size: {
-									width: page.size.width,
-									height: page.size.height,
-								},
-								views: _views,
-							};
-							return
-							const res = await Apis.model.updateProjectPageViews(data);
-							if (res.ok) {
-								message.success("Save success");
-							}
-						}}
-					>
-						Save
-					</Button>
-				</div>
-			</div>
-		</header>
-	);
+              if (isNil(model) || isNil(page)) {
+                return;
+              }
+              const views = page.views || [];
+              const _views: PageViewCreationDataType[] = [];
+              views.forEach((view) => {
+                const v: any = {
+                  title: view.title,
+                  position: {
+                    top: `${view.position.top}`,
+                    left: `${view.position.left}`,
+                  },
+                  size: {
+                    width: `${view.size.width}`,
+                    height: `${view.size.height}`,
+                  },
+                  type: view.type,
+                  data: {
+                    dataSourceId: `${view.data.dataSourceId || ""}`,
+                    dataSourceName: `${view.data.dataSourceName || ""}`,
+                    dataSourceTypeId: `${view.data.dataSourceTypeId || ""}`,
+                    dataSourceTypeName: `${view.data.dataSourceTypeName || ""}`,
+                    sql: view.data.sql || "",
+                    table: view.data.table || "",
+                  },
+                };
+                if (view.options !== null && undefined !== view.options) {
+                  v.options = view.options;
+                }
+                if (!startsWith(view.id, "visual")) {
+                  v.id = view.id;
+                }
+                _views.push(v);
+              });
+              const data: ProjectPageViewsCreationDataType = {
+                projectId: model.id,
+                page: {
+                  id: page.id,
+                  name: page.title,
+                },
+                size: {
+                  width: page.size.width,
+                  height: page.size.height,
+                },
+                views: _views,
+              };
+              console.log(data);
+            }}
+          >
+            Save
+          </Button>
+        </div>
+      </div>
+    </header>
+  );
 }
 
 export default Header;

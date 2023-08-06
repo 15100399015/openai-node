@@ -3,8 +3,11 @@ const { WebSocketServer } = require("ws")
 
 class EventSocket extends WebSocketServer {
     constructor(config) {
-        const { server, path } = config
         super({ noServer: true })
+        const { path } = config
+        this.path = path
+    }
+    init(server) {
         server.on('upgrade', (request, socket, head) => {
             const { pathname } = parse(request.url);
             if (pathname === path) {
@@ -20,4 +23,6 @@ class EventSocket extends WebSocketServer {
 
 
 
-module.exports.EventSocket = EventSocket
+module.exports.eventSocket = new EventSocket({
+    path: "/ws"
+})

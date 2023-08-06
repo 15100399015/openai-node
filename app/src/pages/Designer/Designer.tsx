@@ -22,7 +22,7 @@ import Header from "./Header/Header";
 import Aside from "./Aside/Aside";
 import Scena from "./Scena/Scena";
 import Properties from "./Properties/Properties";
-import "../../assets/styles/designer.less";
+import "@/assets/styles/designer.less";
 import { modelData } from "@/apis/data/mode";
 
 function Dashboard() {
