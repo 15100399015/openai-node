@@ -15,27 +15,34 @@
  * limitations under the License.
  */
 
-import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
+import { createContext } from "react";
+import SolidEditor from "./SolidEditor";
+import { SOLID_EDITOR_PROPERTIES } from "./utils/const";
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
+export const SolidEditorContext = createContext<SolidEditor | null>(null);
 
-export default routes;
+function connectContext(
+	context: React.Context<any>,
+	properties: readonly string[],
+) {
+	return function connect(Component: any) {
+		const { prototype } = Component;
+
+		Component.contextType = context;
+		properties.forEach((name) => {
+			Object.defineProperty(prototype, name, {
+				get() {
+					return this.context[name];
+				},
+				set() {
+					this.context[name](name);
+				},
+			});
+		});
+	};
+}
+
+export const connectEditorContext = connectContext(
+	SolidEditorContext,
+	SOLID_EDITOR_PROPERTIES,
+);

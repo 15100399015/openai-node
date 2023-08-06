@@ -15,27 +15,15 @@
  * limitations under the License.
  */
 
-import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
+.solid-elem {
+	display: block;
+	user-select: none;
+}
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
+.solid-input-number {
+	border: 1px solid rgba(0, 0, 0, 0.15);
 
-export default routes;
+	input[type="number"] {
+		height: 20px;
+	}
+}

@@ -16,26 +16,40 @@
  */
 
 import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
+import usePageProperties from "./usePageProperties";
+import PagePagePropertiesPanel from "./page/PagePagePropertiesPanel";
+import PageModeluiPropertiesPanel from "./page/PageModeluiDialogPanel";
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
+export default function PagePropertiesPanel() {
+	const { currentTabKey, mainRef, renderTabs } = usePageProperties({
+		tabs: [
+			{
+				key: "Page",
+				tab: "Page",
+			},
+			{
+				key: "Modelui",
+				tab: "Modelui",
+			},
+		],
+	});
 
-export default routes;
+	function renderPanel() {
+		if (currentTabKey === "Page") {
+			return <PagePagePropertiesPanel />;
+		}
+		if (currentTabKey === "Modelui") {
+			return <PageModeluiPropertiesPanel />;
+		}
+		return undefined;
+	}
+
+	return (
+		<>
+			<header className="conf-header">{renderTabs()}</header>
+			<main className="conf-main" ref={mainRef}>
+				{renderPanel()}
+			</main>
+		</>
+	);
+}

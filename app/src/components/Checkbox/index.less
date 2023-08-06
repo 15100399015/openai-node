@@ -15,27 +15,46 @@
  * limitations under the License.
  */
 
-import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
+.solid-checkbox {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
+	&.active {
+		.solid-checkbox__main {
+			border-color: #3685f2;
+			background-color: #3685f2;
+			color: #fff;
 
-export default routes;
+			&::after {
+				border-color: #fff;
+				opacity: 1;
+			}
+		}
+	}
+
+	.solid-checkbox__main {
+		position: relative;
+		width: 14px;
+		height: 14px;
+		flex-shrink: 0;
+		margin: 0;
+		border: 1px solid #9ea6b2;
+
+		&::after {
+			content: " ";
+			position: absolute;
+			display: table;
+			top: 45%;
+			left: 16%;
+			border: 2px solid transparent;
+			border-top: 0;
+			border-left: 0;
+			width: 4px;
+			height: 8px;
+			transform: rotate(45deg) scale(1) translate(-50%, -50%);
+			box-sizing: unset;
+		}
+	}
+}

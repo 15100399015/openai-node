@@ -16,26 +16,35 @@
  */
 
 import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
+import {
+	LeftRightExpander,
+	PropertyElement,
+	InputNumber,
+	InputText,
+} from "@/components";
+import { mm, eventbus } from "@/utils";
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
+export default function ScenePropertiesPanel() {
+	const project = mm.getModel();
+	return (
+		<LeftRightExpander expanded showCheckbox={false} title="Project">
+			<PropertyElement label="Width" labelWidth={50}>
+				<InputText value={project?.title || ""} />
+			</PropertyElement>
 
-export default routes;
+			<PropertyElement label="Height" labelWidth={50}>
+				<InputNumber
+					value={768}
+					min={400}
+					step={1}
+					max={3600}
+					onUpdateValue={(value) => {
+						eventbus.emit("onPageHeightChange", {
+							value,
+						});
+					}}
+				/>
+			</PropertyElement>
+		</LeftRightExpander>
+	);
+}

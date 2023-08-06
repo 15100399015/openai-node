@@ -15,27 +15,49 @@
  * limitations under the License.
  */
 
-import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
+@import "@/assets/styles/variables.less";
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
+.group-choose {
+	display: flex;
+	justify-content: space-around;
+	border: 1px solid #424858;
+	padding: 2px;
+	font-size: 12px;
+	width: 100%;
+	border-color: @borderColor;
 
-export default routes;
+	.group-choose-btn {
+		position: relative;
+		display: block;
+		flex: 1 1;
+		width: 33.3%;
+		height: 18px;
+		margin-right: 2px;
+		background-color: @disableColor;
+
+		input[type="radio"]:checked + .group-choose-text {
+			background-color: #3e7dff;
+		}
+	}
+
+	.group-choose-text {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		color: #fff;
+		text-align: center;
+		line-height: 18px;
+
+		user-select: none;
+
+		&:hover {
+			background-color: #a2c0fd;
+		}
+	}
+
+	input {
+		display: none;
+	}
+}

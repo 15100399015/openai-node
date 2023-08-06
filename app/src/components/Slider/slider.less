@@ -15,27 +15,15 @@
  * limitations under the License.
  */
 
-import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
-
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
-
-export default routes;
+.solid-slider {
+	display: block;
+	position: relative;
+	border-right-width: 1px;
+	background-color: #fff;
+	background-image: linear-gradient(90deg, #3e7dff, #3e7dff);
+	background-size: 0 100%;
+	background-repeat: no-repeat;
+	cursor: ew-resize;
+	height: 20px;
+	outline: none;
+}

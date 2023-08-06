@@ -15,27 +15,31 @@
  * limitations under the License.
  */
 
-import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
+import React, { useState } from "react";
+import "./Switch.less";
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
+export interface SwitchProps {
+	checked?: boolean;
 
-export default routes;
+	onChange?: (checked: boolean) => void;
+}
+
+export default function Switch(props: SwitchProps) {
+	const [checked, setChecked] = useState(!!props.checked);
+
+	return (
+		<div className="lingc-switch">
+			<div className="switch-box">
+				<span
+					className={`switch-span ${checked ? "on" : "off"}`}
+					onClick={() => {
+						setChecked(!checked);
+						if (props.onChange) {
+							props.onChange(!checked);
+						}
+					}}
+				/>
+			</div>
+		</div>
+	);
+}

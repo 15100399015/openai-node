@@ -15,27 +15,23 @@
  * limitations under the License.
  */
 
-import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
+@import "@/assets/styles/variables.less";
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
+.aside {
+	position: absolute;
+	top: @headerHeight;
+	left: 0;
+	bottom: 0;
+	width: @asideWidth;
+	z-index: 13;
 
-export default routes;
+	.aside-main {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background-color: #eaecee;
+		border-right: 1px solid #d2d1d1;
+	}
+}

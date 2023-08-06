@@ -16,26 +16,19 @@
  */
 
 import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
+import General from "../General/General";
+import Outline from "../Outline/Outline";
+import "./aside.less";
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
+function Aside() {
+	return (
+		<section className="aside">
+			<div className="aside-main">
+				<General />
+				<Outline />
+			</div>
+		</section>
+	);
+}
 
-export default routes;
+export default Aside;

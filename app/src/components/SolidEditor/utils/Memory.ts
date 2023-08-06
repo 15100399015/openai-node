@@ -15,27 +15,18 @@
  * limitations under the License.
  */
 
-import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
+export default class Memory {
+	public map = new Map<any, any>();
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
+	public get(key: any) {
+		return this.map.get(key);
+	}
 
-export default routes;
+	public set(key: any, value: any) {
+		return this.map.set(key, value);
+	}
+
+	public clear() {
+		this.map.clear();
+	}
+}

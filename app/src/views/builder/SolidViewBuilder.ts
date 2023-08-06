@@ -15,27 +15,35 @@
  * limitations under the License.
  */
 
-import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
+export interface ViewCategory {
+	key: string;
+	title: string;
+}
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
+export type ViewType =
+	| "echarts_bar"
+	| "echarts_line"
+	| "echarts_pie"
+	| "image_base64";
 
-export default routes;
+export default abstract class ViewBuilder {
+	abstract createModel(options?: any): any;
+
+	abstract getFrame(): any;
+
+	abstract getComponentType(): any;
+
+	abstract getId(): string;
+
+	abstract getCategory(): ViewCategory;
+
+	abstract getTitle(): string;
+
+	abstract getType(): ViewType;
+
+	abstract getIcon(): string;
+
+	abstract getImage(): string;
+
+	abstract getDescription(): string;
+}

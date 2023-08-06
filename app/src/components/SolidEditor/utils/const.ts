@@ -15,27 +15,22 @@
  * limitations under the License.
  */
 
-import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
-
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
-
-export default routes;
+export const SOLIDUI_ELEMENT_ID = "solidui-element-id";
+export const SOLIDUI_ELEMENT = "solidui-element";
+export const CONTENT_TYPE_SOLIDUI_LAYERS = "application/x-solidui-layers";
+export const SOLID_EDITOR_PROPERTIES = [
+	"memory",
+	"eventBus",
+	"keyManager",
+	"moveableData",
+	"moveableManager",
+	"historyManager",
+	"console",
+	"getEditorManager",
+	"getViewport",
+	"getSelecto",
+	"getEditorElement",
+	"getSelectedTargets",
+	"selectMenu",
+	"getSelectedFrames",
+] as const;

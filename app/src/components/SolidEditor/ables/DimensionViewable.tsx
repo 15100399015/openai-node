@@ -15,27 +15,34 @@
  * limitations under the License.
  */
 
-import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
+import * as React from "react";
+import { MoveableManagerInterface } from "react-moveable";
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
+export interface DimensionViewableProps {
+	dimensionViewable?: boolean;
+}
+export const DimensionViewable = {
+	name: "dimensionViewable",
+	props: {
+		dimensionViewable: Boolean,
+	},
+	events: {},
+	render(moveable: MoveableManagerInterface) {
+		const { zoom = 0 } = moveable.props;
+		const rect = moveable.getRect();
 
-export default routes;
+		return (
+			<div
+				key="dimension-viewer"
+				className="solid-view-dimension"
+				style={{
+					left: `${rect.width / 2}px`,
+					top: `${rect.height}px`,
+					transform: `translate(-50%, ${20 * zoom}px) scale(${zoom})`,
+				}}
+			>
+				{Math.round(rect.offsetWidth)} x {Math.round(rect.offsetHeight)}
+			</div>
+		);
+	},
+} as const;

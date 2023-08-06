@@ -15,27 +15,28 @@
  * limitations under the License.
  */
 
-import React from "react";
-import { RouteObject } from "react-router-dom";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
+.solid-color {
+	.swatch {
+		text-align: center;
+		font-weight: 700;
+		color: #fff;
+		text-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px;
+		padding: 3px 8px;
+		cursor: pointer;
+		outline: none;
+	}
 
-const routes: RouteObject[] = [
-  {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Assistant />,
-      },
-      {
-        path: "/dashboard",
-        element: <Dashboard />,
-      },
-    ],
-  },
-];
+	.cover {
+		position: fixed;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		outline: none;
+	}
 
-export default routes;
+	.popover {
+		position: fixed;
+		z-index: 9999;
+	}
+}
