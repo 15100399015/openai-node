@@ -1,6 +1,12 @@
-const {eventSocket} = require("../../../eventSocket")
+const { connect } = require("../../../eventSocket")
 
 module.exports = function (parameter, callback) {
-    eventSocket
-
+    console.log("调用了 createChart", parameter);
+    if (connect.currentConnect) {
+        connect.currentConnect.send(JSON.stringify({
+            type: "event",
+            name: "createBarView",
+            parameter
+        }))
+    }
 }

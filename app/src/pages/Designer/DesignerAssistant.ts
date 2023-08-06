@@ -1,11 +1,12 @@
 import { subscriber } from "@/service/eventSocket";
 import { eventbus, mm } from "@/utils/index";
 
-subscriber.on("message", function (event: any) {
+subscriber.on("event", function (event: any) {
+  console.log(event);
   // 事件类型为 appendChart
-  if (event.name === "appendChart") {
+  if (event.name === "createBarView") {
     // 要添加的图表类型为 echarts_bar
-    if (event.parameter.type === "echarts_bar") {
+    if (event.parameter.class === "echarts_bar") {
       eventbus.emit("onDraw", {
         viewType: "echarts_bar",
       });

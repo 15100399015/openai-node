@@ -1,16 +1,22 @@
 const { parse } = require("url")
 const { WebSocketServer } = require("ws")
 
+
+
+let connect = {
+    currentConnect: null
+}
+
 class EventSocket extends WebSocketServer {
     constructor(config) {
         super({ noServer: true })
         const { path } = config
         this.path = path
     }
-    init(server) {
+    init = (server) => {
         server.on('upgrade', (request, socket, head) => {
             const { pathname } = parse(request.url);
-            if (pathname === path) {
+            if (pathname === this.path) {
                 this.handleUpgrade(request, socket, head, (ws) => {
                     this.emit('connection', ws, request);
                 });
@@ -21,8 +27,14 @@ class EventSocket extends WebSocketServer {
     }
 }
 
-
-
-module.exports.eventSocket = new EventSocket({
-    path: "/ws"
+const eventSocket = new EventSocket({
+    path: "/api/ws"
 })
+eventSocket.on('connection', function connection(ws) {
+    connect.currentConnect = ws
+    ws.on('error', console.error);
+});
+module.exports = {
+    eventSocket,
+    connect
+} 

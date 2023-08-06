@@ -8,15 +8,15 @@ const ws = new WebSocket("ws://localhost:8080/api/ws");
 ws.addEventListener("message", (event) => {
   let data: any = null;
   try {
-    data = JSON.stringify(event.data);
+    data = JSON.parse(event.data);
   } catch (error) {}
   if (data) {
     // 消息类型为 event 事件
     if (data.type === "event") {
-      subscriber.emit("event", event.data);
+      subscriber.emit("event", data);
     }
     if (data.type === "message") {
-      subscriber.emit("message", event.data);
+      subscriber.emit("message", data);
     }
   }
 });

@@ -44,7 +44,7 @@ export function PromptForm({
       }}
       ref={formRef}
     >
-      <div className="relative flex max-h-60 w-full grow flex-col overflow-hidden bg-background pr-8 sm:rounded-md sm:border sm:pr-12">
+      <div className="relative flex max-h-60 w-full mb-[30px] grow flex-col overflow-hidden bg-background pr-8 border sm:pr-12">
         <Textarea
           disabled={isLoading}
           ref={inputRef}

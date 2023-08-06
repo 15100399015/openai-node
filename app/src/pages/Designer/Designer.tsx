@@ -24,7 +24,7 @@ import Scena from "./Scena/Scena";
 import Properties from "./Properties/Properties";
 import "@/assets/styles/designer.less";
 import { modelData } from "@/apis/data/mode";
-
+import {} from "./DesignerAssistant";
 function Dashboard() {
   const handleLoad = useMemoizedFn(async () => {
     mm.attach(modelData);

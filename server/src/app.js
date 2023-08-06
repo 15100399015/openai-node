@@ -9,7 +9,6 @@ const { eventSocket } = require('./eventSocket')
 const app = express();
 
 function main(httpServer) {
-
   eventSocket.init(httpServer)
 }
 

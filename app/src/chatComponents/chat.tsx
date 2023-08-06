@@ -8,6 +8,15 @@ import { ChatPanel } from "@/chatComponents/chat-panel";
 import { EmptyScreen } from "@/chatComponents/empty-screen";
 import { ChatScrollAnchor } from "@/chatComponents/chat-scroll-anchor";
 import { toast } from "react-hot-toast";
+import { Select } from "antd";
+import { useState } from "react";
+
+const plugins = [
+  {
+    label: "视图助手",
+    value: "managerPlugin",
+  },
+];
 
 export interface ChatProps extends React.ComponentProps<"div"> {
   initialMessages?: Message[];
@@ -15,6 +24,7 @@ export interface ChatProps extends React.ComponentProps<"div"> {
 }
 
 export function Chat({ id, initialMessages, className }: ChatProps) {
+  const [currentPlugin, setCurrentPlugin] = useState(null);
   const { messages, append, reload, stop, isLoading, input, setInput } =
     useChat({
       api: "/api/chat",
@@ -25,6 +35,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       id,
       body: {
         id,
+        plugin: currentPlugin,
       },
       onResponse(response: any) {
         if (response.status === 401) {
@@ -34,6 +45,13 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     });
   return (
     <div className="h-full flex flex-col">
+      <Select
+        placeholder="请选择要使用的插件"
+        options={plugins}
+        onChange={setCurrentPlugin}
+        value={currentPlugin}
+        allowClear
+      ></Select>
       <div className={cn("flex-1 pt-4 md:pt-10 overflow-auto", className)}>
         {messages.length ? (
           <>
@@ -44,6 +62,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
           <EmptyScreen />
         )}
       </div>
+
       <ChatPanel
         id={id}
         isLoading={isLoading}
