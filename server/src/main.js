@@ -1,19 +1,21 @@
 const http = require('http');
 const express = require("express");
-const { OpenAIStream } = require('ai')
 const { Configuration, OpenAIApi } = require('openai-edge')
 const { EventSocket } = require('./webSocket.js');
-const { functions } = require("./functions/definition.js");
 
 require("dotenv").config();
 
 const app = express();
-const httpServer = http.createServer(app)
-const eventSocket = new EventSocket({ server: httpServer, path: "/api/ws" })
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.text());
+
+
+const httpServer = http.createServer(app)
+
+const eventSocket = new EventSocket({ server: httpServer, path: "/api/ws" })
+
+
 httpServer.listen(process.env.port, function () {
   console.log("listening on port " + process.env.port);
 });
@@ -33,7 +35,7 @@ app.post("/api/char", async function (req, res) {
   const char_res = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages: req.body.messages,
-    functions: functions,
+    // functions: functions,
     n: 1
   })
   const { id, object, created, model, choices, usage } = await char_res.json()
@@ -48,3 +50,4 @@ app.post("/api/char", async function (req, res) {
 eventSocket.addListener("connection", (ws) => {
   currentConnect = ws
 })
+

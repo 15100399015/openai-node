@@ -19,8 +19,8 @@ import React from "react";
 import { RouteObject } from "react-router-dom";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import Assistant from "@/pages/Assistant/Assistant";
-import Dashboard from "../pages/Designer/Designer";
-
+import Dashboard from "@/pages/Designer/Designer";
+import Home from "@/pages/Home/Home";
 const routes: RouteObject[] = [
   {
     path: "/",
@@ -28,6 +28,10 @@ const routes: RouteObject[] = [
     children: [
       {
         path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/chat",
         element: <Assistant />,
       },
       {

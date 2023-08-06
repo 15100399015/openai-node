@@ -1,4 +1,4 @@
-const functions = [
+const definition = [
   {
     "name": "getChartId",
     "description": "根据图表名称获取图表id",
@@ -62,4 +62,6 @@ const functions = [
   }
 ]
 
-module.exports.functions = functions
+module.exports = {
+  definition
+}

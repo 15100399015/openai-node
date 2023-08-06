@@ -17,32 +17,7 @@
 
 import React from "react";
 import { Outlet } from "react-router-dom";
-import type { MenuProps } from "antd";
-import { DesktopOutlined, PieChartOutlined } from "@ant-design/icons";
 import "./DefaultLayout.less";
-
-type MenuItem = Required<MenuProps>["items"][number];
-
-function getItem(
-  label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-  type?: "group"
-): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  } as MenuItem;
-}
-
-const items: MenuItem[] = [
-  getItem("Project", "/project", <PieChartOutlined rev={1} />),
-  getItem("Datasource", "/datasource", <DesktopOutlined rev={1} />),
-];
 
 export default function DefaultLayout() {
   return (

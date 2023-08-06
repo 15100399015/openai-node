@@ -33,8 +33,8 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       },
     });
   return (
-    <>
-      <div className={cn("pb-[200px] pt-4 md:pt-10 ", className)}>
+    <div className="h-full flex flex-col">
+      <div className={cn("flex-1 pt-4 md:pt-10 overflow-auto", className)}>
         {messages.length ? (
           <>
             <ChatList messages={messages} />
@@ -54,6 +54,6 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         input={input}
         setInput={setInput}
       />
-    </>
+    </div>
   );
 }
