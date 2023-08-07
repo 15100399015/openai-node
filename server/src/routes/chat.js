@@ -3,6 +3,7 @@ const { OpenAIStream, streamToResponse } = require("ai");
 const { Configuration, OpenAIApi } = require("openai-edge");
 const chatPlugins = require("../chatPlugin");
 const router = express.Router();
+const cookie = require("cookie");
 
 const configuration = new Configuration({
   organization: process.env.organization,
@@ -16,6 +17,7 @@ router.post("/chat", async function (req, res, next) {
   const body = req.body || {};
   const reqMessages = body.messages;
   const reqPlugin = body.plugin;
+  const { session } = req.cookies;
   let plugin = null;
   if (reqPlugin)
     plugin = Object.values(chatPlugins).find(
@@ -47,7 +49,7 @@ router.post("/chat", async function (req, res, next) {
         }
       );
     }
-    res.send(content);
+    res.send("我们正在为您执行此操作请稍等");
   } else {
     const stream = OpenAIStream(char_res);
     streamToResponse(stream, res);
