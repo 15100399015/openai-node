@@ -1,12 +1,16 @@
-const { connect } = require("../../../eventSocket")
+const { connectTable } = require("../../../eventSocket");
 
-module.exports = function (parameter, callback) {
-    console.log("调用了 createChart", parameter);
-    if (connect.currentConnect) {
-        connect.currentConnect.send(JSON.stringify({
-            type: "event",
-            name: "createBarView",
-            parameter
-        }))
-    }
-}
+module.exports = function (user, function_call, callback) {
+  const { session } = user;
+  const { parameter, name } = function_call;
+  console.log("调用了", name, parameter);
+  if (session && connectTable[session]) {
+    connectTable[session].send(
+      JSON.stringify({
+        type: "event",
+        name: "createBarView",
+        parameter,
+      })
+    );
+  }
+};
