@@ -62,7 +62,6 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
           <EmptyScreen />
         )}
       </div>
-
       <ChatPanel
         id={id}
         isLoading={isLoading}

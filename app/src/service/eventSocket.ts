@@ -1,12 +1,17 @@
 import { message } from "antd";
 import mitt from "mitt";
 
-const socketHost = "ws://localhost:8080/api/ws";
-export let ws: WebSocket | null = null;
+let wsInstance: any = null;
+
+export const getConnection = () => {
+  if (wsInstance) return wsInstance;
+  return (wsInstance = new WebSocket("ws://localhost:8080/api/ws"));
+};
+
 export const subscriber = mitt();
 
 export const connectEventSocket = () => {
-  ws = new WebSocket(socketHost);
+  const ws = getConnection() as WebSocket;
 
   ws.addEventListener("message", (event) => {
     let data: any = null;
@@ -33,4 +38,8 @@ export const connectEventSocket = () => {
   ws.addEventListener("error", (event) => {
     //   subscriber.emit("error", event);
   });
+  return () => {
+    ws.close();
+    wsInstance = null;
+  };
 };

@@ -24,12 +24,21 @@ import Scena from "./Scena/Scena";
 import Properties from "./Properties/Properties";
 import "@/assets/styles/designer.less";
 import { modelData } from "@/apis/data/mode";
-import {} from "./DesignerAssistant";
+import "./DesignerAssistant";
+import { connectEventSocket } from "../../service/eventSocket";
+
 function Dashboard() {
   const handleLoad = useMemoizedFn(async () => {
     mm.attach(modelData);
     eventbus.emit("onModelLoad", { model: modelData });
   });
+
+  React.useEffect(() => {
+    const close = connectEventSocket();
+    return () => {
+      close();
+    };
+  }, []);
 
   React.useEffect(() => {
     handleLoad();
