@@ -20,14 +20,14 @@ import { SolidViewDataType } from "@/types/solid";
 import { genId } from "@/utils";
 import EChartsBaseViewBuilder from "./EChartsBaseViewBuilder";
 import { ViewCategory, ViewType } from "../SolidViewBuilder";
-import EChartsBarSolidView from "../../echarts/EChartsBarSolidView";
+import EChartsLineSolidView from "../../echarts/EChartsLineSolidView";
 
 export default class EChartsBarSolidViewBuilder extends EChartsBaseViewBuilder {
   createModel(): any {
     const viewModel: SolidViewDataType = {
       id: genId(),
-      title: "bar",
-      type: "echarts_bar",
+      title: "line",
+      type: "echarts_line",
       position: {
         top: 0,
         left: 0,
@@ -101,7 +101,7 @@ export default class EChartsBarSolidViewBuilder extends EChartsBaseViewBuilder {
   }
 
   getComponentType(): any {
-    return EChartsBarSolidView;
+    return EChartsLineSolidView;
   }
 
   getCategory(): ViewCategory {
@@ -120,15 +120,15 @@ export default class EChartsBarSolidViewBuilder extends EChartsBaseViewBuilder {
   }
 
   getTitle(): string {
-    return "Bar Chart";
+    return "Line Chart";
   }
 
   getType(): ViewType {
-    return "echarts_bar";
+    return "echarts_line";
   }
 
   getId(): string {
-    return "echarts_bar";
+    return "echarts_line";
   }
 
   getImage(): string {

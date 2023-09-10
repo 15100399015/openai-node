@@ -64,7 +64,7 @@ function Header() {
           </div>
         </div>
         <div className="header-center">
-          <Tooltip title="Bar Chart">
+          {/* <Tooltip title="Bar Chart">
             <ChartHistogramTwo
               theme="two-tone"
               size="32"
@@ -81,6 +81,23 @@ function Header() {
               }}
             />
           </Tooltip>
+          <Tooltip title="Line Chart">
+            <ChartHistogramTwo
+              theme="two-tone"
+              size="32"
+              fill={["#379aff", "#4890f3"]}
+              strokeLinejoin="bevel"
+              strokeLinecap="square"
+              style={{
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                eventbus.emit("onDraw", {
+                  viewType: "echarts_line",
+                });
+              }}
+            />
+          </Tooltip> */}
         </div>
         <div className="header-right">
           <Button

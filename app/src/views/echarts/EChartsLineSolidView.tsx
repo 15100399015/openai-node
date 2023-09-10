@@ -16,123 +16,116 @@
  */
 
 import {
-	SeriesOption,
-	XAXisComponentOption,
-	LegendComponentOption,
-	GridComponentOption,
-	TooltipComponentOption,
+  SeriesOption,
+  XAXisComponentOption,
+  LegendComponentOption,
+  GridComponentOption,
+  TooltipComponentOption,
 } from "echarts";
-import { findIndex, get, head } from "lodash-es";
+import { findIndex, head } from "lodash-es";
 import EChartsBaseSolidView, {
-	EChartsBaseSolidViewProps,
+  EChartsBaseSolidViewProps,
 } from "./EChartsBaseSolidView";
 
-export type SolidEChartsLineViewProps = EChartsBaseSolidViewProps;
+export type SolidEChartsBarViewProps = EChartsBaseSolidViewProps;
 
-export default class EChartsLineSolidView extends EChartsBaseSolidView<SolidEChartsLineViewProps> {
-	private getSeries(measure: any): SeriesOption | undefined {
-		// 1.
-		const row0 = this.dataSheet[0];
-		if (!row0) return undefined;
+export default class EChartsBarSolidView extends EChartsBaseSolidView<SolidEChartsBarViewProps> {
+  private getSeries(y: any): SeriesOption | undefined {
+    const row0 = this.dataSheet[0];
+    if (!row0) return undefined;
 
-		// 2.
-		const measureIdx = findIndex(row0, (o) => o === measure.label);
-		if (measureIdx === -1) return undefined;
+    const xIdx = findIndex(row0, (o) => o === y.label);
+    if (xIdx === -1) return undefined;
 
-		// 3.
-		const seriesData: any[] = [];
-		this.dataSheet.forEach((row, idx) => {
-			if (idx === 0) return;
+    const seriesData: any[] = [];
+    this.dataSheet.forEach((row, idx) => {
+      if (idx === 0) return;
 
-			seriesData.push({
-				name: measure.label,
-				value: row[measureIdx],
-			});
-		});
+      seriesData.push({
+        name: y.label,
+        value: row[xIdx],
+      });
+    });
 
-		return {
-			type: "bar",
-			name: measure.label,
-			data: seriesData,
-		};
-	}
+    return {
+      type: "line",
+      name: y.label,
+      data: seriesData,
+    };
+  }
 
-	protected getXAxisOption():
-		| XAXisComponentOption
-		| XAXisComponentOption[]
-		| undefined {
-		const headRow = head(this.dataSheet);
-		if (!headRow) return {};
-		const viewDimensions = get(
-			this.props.viewModel,
-			"metadata.viewDimensions",
-			[],
-		) as any[];
-		const headDimension = head(viewDimensions);
-		if (!headDimension) return {};
-		const viewDimensionIdx = findIndex(
-			headRow,
-			(o) => o === headDimension.label,
-		);
-		if (viewDimensionIdx === -1) return {};
+  protected getXAxisOption():
+    | XAXisComponentOption
+    | XAXisComponentOption[]
+    | undefined {
+    const headRow = head(this.dataSheet);
+    if (!headRow) return {};
+    const xs = this.getXs();
+    if (!xs || xs.length === 0) return {};
+    // let viewDimensions = get(this.props.viewModel, "data.xs", []) as any[];
+    // let headDimension = head(viewDimensions);
+    const headDimension = head(xs);
+    const viewDimensionIdx = findIndex(
+      headRow,
+      (o) => o === headDimension!.label
+    );
+    if (viewDimensionIdx === -1) return {};
 
-		const xAxisData: any[] = [];
-		this.dataSheet.forEach((row, idx) => {
-			if (idx === 0) return;
+    const xAxisData: any[] = [];
+    this.dataSheet.forEach((row, idx) => {
+      if (idx === 0) return;
 
-			xAxisData.push({
-				value: row[viewDimensionIdx],
-			});
-		});
+      xAxisData.push({
+        value: row[viewDimensionIdx],
+      });
+    });
 
-		const vm = this.props.viewModel as any;
-		const option = vm.option || {};
+    const vm = this.props.viewModel as any;
+    const option = vm.option || {};
 
-		return {
-			type: "category",
-			data: xAxisData,
-			...option.xAxis,
-		};
-	}
+    return {
+      type: "category",
+      data: xAxisData,
+      ...option.xAxis,
+    };
+  }
 
-	protected getSeriesOption(): SeriesOption[] | undefined {
-		const measures = get(
-			this.props.viewModel,
-			"metadata.measures",
-			[],
-		) as any[];
-		const seriesList: SeriesOption[] = [];
-		measures.forEach((item) => {
-			const series = this.getSeries(item);
-			if (series) {
-				seriesList.push(series);
-			}
-		});
+  protected getSeriesOption(): SeriesOption[] | undefined {
+    // let xs = get(this.props.viewModel, "data.ys", []) as any[];
+    const ys = this.getYs();
+    const seriesList: SeriesOption[] = [];
+    ys.forEach((y) => {
+      const series = this.getSeries(y);
+      if (series) {
+        seriesList.push(series);
+      }
+    });
 
-		return seriesList;
-	}
+    return seriesList;
+  }
 
-	protected getLegendOption():
-		| LegendComponentOption
-		| LegendComponentOption[]
-		| undefined {
-		const vm = this.props.viewModel as any;
-		const option = vm.option || {};
-		return option.legend;
-	}
+  protected getLegendOption():
+    | LegendComponentOption
+    | LegendComponentOption[]
+    | undefined {
+    const vm = this.props.viewModel as any;
+    const option = vm.option || {};
+    return option.legend;
+  }
 
-	protected getGridOption(): GridComponentOption | GridComponentOption[] {
-		const vm = this.props.viewModel as any;
-		const option = vm.option || {};
-		return option.grid || {};
-	}
+  protected getGridOption(): GridComponentOption | GridComponentOption[] {
+    const baseGridOptions = super.getGridOption();
+    const vm = this.props.viewModel as any;
+    const option = vm.option || {};
+    return { ...baseGridOptions, ...option.grid };
+  }
 
-	protected getTooltipOption():
-		| TooltipComponentOption
-		| TooltipComponentOption[]
-		| undefined {
-		const vm = this.props.viewModel as any;
-		const option = vm.option || {};
-		return option.tooltip || {};
-	}
+  protected getTooltipOption():
+    | TooltipComponentOption
+    | TooltipComponentOption[]
+    | undefined {
+    const vm = this.props.viewModel as any;
+    const option = vm.option || {};
+    return option.tooltip || {};
+  }
 }

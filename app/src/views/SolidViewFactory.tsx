@@ -17,33 +17,35 @@
 
 import SolidViewBuilder from "./builder/SolidViewBuilder";
 import EChartsBarSolidViewBuilder from "./builder/echarts/EChartsBarSolidViewBuilder";
+import EChartsLineSolidViewBuilder from "./builder/echarts/EChartsLineSolidViewBuilder";
 import Base64ImageSolidViewBuilder from "./builder/images/Base64ImageSolidViewBuilder";
 
 export default class ViewFactory {
-	private pool: Map<string, SolidViewBuilder> = new Map<
-		string,
-		SolidViewBuilder
-	>();
+  private pool: Map<string, SolidViewBuilder> = new Map<
+    string,
+    SolidViewBuilder
+  >();
 
-	public constructor() {
-		this.init();
-	}
+  public constructor() {
+    this.init();
+  }
 
-	public init(): void {
-		this.register(new EChartsBarSolidViewBuilder());
-		this.register(new Base64ImageSolidViewBuilder());
-	}
+  public init(): void {
+    this.register(new EChartsLineSolidViewBuilder());
+    this.register(new EChartsBarSolidViewBuilder());
+    this.register(new Base64ImageSolidViewBuilder());
+  }
 
-	public register(builder: SolidViewBuilder): void {
-		this.pool.set(builder.getType(), builder);
-	}
+  public register(builder: SolidViewBuilder): void {
+    this.pool.set(builder.getType(), builder);
+  }
 
-	public getBuilder(type: string): SolidViewBuilder | undefined {
-		const builder = this.pool.get(type);
-		if (undefined === builder || builder === null) {
-			// console.warn(`can't found solid view builder, type = ${type}`);
-			return undefined;
-		}
-		return builder;
-	}
+  public getBuilder(type: string): SolidViewBuilder | undefined {
+    const builder = this.pool.get(type);
+    if (undefined === builder || builder === null) {
+      // console.warn(`can't found solid view builder, type = ${type}`);
+      return undefined;
+    }
+    return builder;
+  }
 }

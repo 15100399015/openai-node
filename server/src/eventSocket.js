@@ -2,8 +2,8 @@ const { parse } = require("url")
 const { WebSocketServer } = require("ws")
 const cookie = require("cookie")
 let connectTable = {}
-function getConnect(session) {
-    return connectTable[session]
+function getConnection(session) {
+  return connectTable[session]
 }
 class EventSocket extends WebSocketServer {
   constructor(config) {
@@ -42,7 +42,7 @@ eventSocket.on("connection", (wss, req) => {
 eventSocket.on("error", console.error);
 
 module.exports = {
-    eventSocket,
-    connectTable,
-    getConnect
+  eventSocket,
+  connectTable,
+  getConnection
 } 
