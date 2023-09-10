@@ -1,12 +1,12 @@
 const { definition } = require("./definition")
 const managerPlugin = {
     name: "managerPlugin",
-    description: "这里是个管理插件，它可以帮你完成一些图标的操作，而不需要你自己手动完成",
+    description: "这里是个图表管理插件，它可以帮你完成一些图表的操作，比如创建，删除，修改，查找图表等操作",
     definition: definition,
-    callFunction(name, parameter, callback = () => { }) {
+    callFunction(name, ...args) {
         try {
             const func = require(`./implements/${name}`)
-            func(parameter, callback)
+            func(...args)
         } catch (error) { }
     }
 }

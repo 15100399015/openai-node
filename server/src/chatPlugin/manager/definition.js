@@ -1,14 +1,18 @@
 const definition = [
-  // 
   {
-    "name": "createBarView",
+    "name": "createView",
     "description": "创建或添加一个新的图表",
     "parameters": {
       "type": "object",
+      "required": [
+        "name",
+        "class",
+        "dataSource"
+      ],
       "properties": {
         "name": {
           "type": "string",
-          "description": "这是图表名称"
+          "description": "这是图表名称",
         },
         "class": {
           "type": "string",
