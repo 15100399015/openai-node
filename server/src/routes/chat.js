@@ -1,13 +1,14 @@
 const express = require("express");
-const { OpenAIStream, streamToResponse } = require('ai')
-const { Configuration, OpenAIApi } = require('openai-edge')
-const chatPlugins = require("../chatPlugin")
+const { OpenAIStream, streamToResponse } = require("ai");
+const { Configuration, OpenAIApi } = require("openai-edge");
+const chatPlugins = require("../chatPlugin");
 const router = express.Router();
+const cookie = require("cookie");
 
 const configuration = new Configuration({
   organization: process.env.organization,
   apiKey: process.env.apiKey,
-  basePath: process.env.basePath
+  basePath: process.env.basePath,
 });
 
 const openai = new OpenAIApi(configuration);
@@ -44,7 +45,7 @@ router.post('/chat', async function (req, res, next) {
   if (reqPlugin) plugin = Object.values(chatPlugins).find((plugin) => plugin.name === reqPlugin)
   if (reqPlugin) {
     if (!plugin || plugin.definition.length <= 0) {
-      return res.send("为找到您要使用的插件")
+      return res.send("为找到您要使用的插件");
     }
   }
   const char_res = await openai.createChatCompletion({
@@ -52,8 +53,8 @@ router.post('/chat', async function (req, res, next) {
     messages: [preinstall].concat(reqMessages),
     n: 1,
     functions: reqPlugin ? plugin.definition : void 0,
-    stream: !reqPlugin
-  })
+    stream: !reqPlugin,
+  });
   if (reqPlugin) {
     const { id, object, created, model, choices, usage } = await char_res.json()
     const answer = choices && choices.length && choices[0]
@@ -70,10 +71,9 @@ router.post('/chat', async function (req, res, next) {
       res.send("你可以说的更详细一点哦")
     }
   } else {
-    const stream = OpenAIStream(char_res)
-    streamToResponse(stream, res)
+    const stream = OpenAIStream(char_res);
+    streamToResponse(stream, res);
   }
-
 });
 
 module.exports = router;
