@@ -16,6 +16,10 @@ const plugins = [
     label: "视图助手",
     value: "managerPlugin",
   },
+  {
+    label: "场景助手",
+    value: "scenePlugin",
+  },
 ];
 
 export interface ChatProps extends React.ComponentProps<"div"> {
@@ -51,7 +55,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         onChange={setCurrentPlugin}
         value={currentPlugin}
         allowClear
-      ></Select>
+      />
       <div className={cn("flex-1 pt-4 md:pt-10 overflow-auto", className)}>
         {messages.length ? (
           <>
