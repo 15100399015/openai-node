@@ -38,11 +38,11 @@ export default async function (app: Express, server: Server) {
     appDataSource: datasource,
   });
 
-    const chain = new SqlDatabaseChain({
-      llm: new OpenAI({ temperature: 0 }),
-      database: db,
-    });
+  const chain = new SqlDatabaseChain({
+    llm: new OpenAI({ temperature: 0 }),
+    database: db,
+  });
 
-    const res = await chain.run("How many tracks are there?");
-    console.log(res);
+  const res = await chain.run("How many Photo are there?");
+  console.log(res);
 }
