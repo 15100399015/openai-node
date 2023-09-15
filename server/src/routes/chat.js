@@ -38,10 +38,7 @@ router.post('/chat', async function (req, res, next) {
     stream: !reqPlugin,
   });
   if (reqPlugin) {
-    console.log(await char_res.json());
-
-    // const { id, object, created, model, choices, usage } = await char_res.json()
-    return
+    const { id, object, created, model, choices, usage } = await char_res.json()
     const answer = choices && choices.length && choices[0]
     if (answer) {
       const { index, message, finish_reason } = answer
