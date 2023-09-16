@@ -6,14 +6,13 @@ import createError from "http-errors";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import main from "./main";
+import main from "./langchain/main";
 import "reflect-metadata";
 
 const app = express();
 const server = http.createServer(app);
 const port = 9090;
 
-main(app, server);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -21,6 +20,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../public")));
 
 app.use("/", (req, res) => {});
+
+main(app, server);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
