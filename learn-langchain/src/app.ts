@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 import express from "express";
 import http from "http";
 import createError from "http-errors";
@@ -7,10 +9,9 @@ import logger from "morgan";
 import main from "./main";
 import "reflect-metadata";
 
-require("dotenv").config();
 const app = express();
 const server = http.createServer(app);
-const port = 3000;
+const port = 9090;
 
 main(app, server);
 app.use(logger("dev"));

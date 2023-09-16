@@ -18,13 +18,11 @@ router.post('/chat', async function (req, res, next) {
   let reqMessages = body.messages
   let reqPlugin = body.plugin
   let plugin = null
+  console.log(body);
   if (reqPlugin) {
     plugin = Object.values(chatPlugins).find((plugin) => plugin.name === reqPlugin)
-    console.log(plugin);
     if (plugin) {
       reqMessages = [{ role: "system", content: plugin.preinstall }].concat(reqMessages)
-
-      console.log(reqMessages);
     } else {
       return res.send("为找到您要使用的插件");
     }
