@@ -12,7 +12,6 @@
     "@types/node": "^20.6.1"
   },
   "dependencies": {
-    "ai": "^2.1.32",
     "cookie": "^0.5.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -29,7 +28,6 @@
     "ts-node-dev": "^2.0.0",
     "typeorm": "^0.3.17",
     "typescript": "^5.2.2",
-    "ws": "^8.13.0",
     "zod": "^3.22.2",
     "zod-to-json-schema": "^3.21.4"
   }

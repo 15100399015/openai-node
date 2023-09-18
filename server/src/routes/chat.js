@@ -32,8 +32,8 @@ router.post('/chat', async function (req, res, next) {
     model: 'gpt-3.5-turbo',
     messages: reqMessages,
     n: 1,
-    functions: reqPlugin ? plugin.definition : void 0,
-    stream: !reqPlugin,
+    functions: (reqPlugin && plugin.definition && plugin.definition.length) ? plugin.definition : void 0,
+    stream: Boolean(plugin && plugin.definition.length),
   });
   if (reqPlugin) {
     const { id, object, created, model, choices, usage } = await char_res.json()
