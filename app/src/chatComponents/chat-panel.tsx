@@ -3,6 +3,18 @@ import { type UseChatHelpers } from "ai/react";
 import { Button } from "@/chatComponents/ui/button";
 import { PromptForm } from "@/chatComponents/prompt-form";
 import { IconRefresh, IconStop } from "@/chatComponents/ui/icons";
+import { Select } from "antd";
+
+const plugins = [
+  {
+    label: "视图助手",
+    value: "managerPlugin",
+  },
+  {
+    label: "场景助手",
+    value: "scenePlugin",
+  },
+];
 
 export interface ChatPanelProps
   extends Pick<
@@ -16,6 +28,8 @@ export interface ChatPanelProps
     | "setInput"
   > {
   id?: string;
+  plugin: string | null;
+  setPlugin: (plugin: string) => void;
 }
 
 export function ChatPanel({
@@ -27,6 +41,8 @@ export function ChatPanel({
   input,
   setInput,
   messages,
+  setPlugin,
+  plugin,
 }: ChatPanelProps) {
   return (
     <div>
@@ -54,7 +70,15 @@ export function ChatPanel({
             )
           )}
         </div>
-        <div className="space-y-4 bg-background shadow-lg ">
+        <div className="space-y-4 bg-background shadow-lg">
+          <Select
+            style={{ width: "100%" }}
+            placeholder="请选择要使用的插件"
+            options={plugins}
+            onChange={setPlugin}
+            value={plugin}
+            allowClear
+          />
           <PromptForm
             onSubmit={async (value) => {
               await append({

@@ -34,6 +34,7 @@ export function PromptForm({
 
   return (
     <form
+      style={{ marginTop: 0 }}
       onSubmit={async (e) => {
         e.preventDefault();
         if (!input?.trim()) {
