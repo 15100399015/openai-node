@@ -12,48 +12,74 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-router.post('/chat', async function (req, res, next) {
-  const session = req.cookies.session
-  const body = req.body || {}
-  let reqMessages = body.messages
-  let reqPlugin = body.plugin
-  let plugin = null
-  console.log(body);
-  if (reqPlugin) {
-    plugin = Object.values(chatPlugins).find((plugin) => plugin.name === reqPlugin)
-    if (plugin) {
-      reqMessages = [{ role: "system", content: plugin.preinstall }].concat(reqMessages)
-    } else {
-      return res.send("为找到您要使用的插件");
-    }
-  }
+router.post("/chat", async function (req, res, next) {
+  const session = req.cookies.session;
+  const body = req.body || {};
+  let reqMessages = body.messages;
+  const { plugin, preinstall, functions } = validationPlugin(body.plugin);
 
-  const char_res = await openai.createChatCompletion({
-    model: 'gpt-3.5-turbo',
+  const char_req_params = {
+    model: "gpt-3.5-turbo",
     messages: reqMessages,
-    n: 1,
-    functions: (reqPlugin && plugin.definition && plugin.definition.length) ? plugin.definition : void 0,
-    stream: Boolean(plugin && plugin.definition.length),
-  });
-  if (reqPlugin) {
-    const { id, object, created, model, choices, usage } = await char_res.json()
-    const answer = choices && choices.length && choices[0]
+    stream: true,
+  };
+  if (preinstall) {
+    char_req_params.messages = [{ role: "system", content: preinstall }].concat(
+      char_req_params.messages
+    );
+  }
+  if (functions) {
+    char_req_params.plugin = functions;
+    char_req_params.stream = false;
+  }
+  const char_res = await openai.createChatCompletion(char_req_params);
+
+  if (functions) {
+    const { id, object, created, model, choices, usage } =
+      await char_res.json();
+    const answer = choices && choices.length && choices[0];
     if (answer) {
-      const { index, message, finish_reason } = answer
-      const { content, function_call, role } = message
+      const { index, message, finish_reason } = answer;
+      const { content, function_call, role } = message;
       if (function_call) {
-        plugin.callFunction(function_call.name, session, JSON.parse(function_call.arguments || "{}"))
-        res.send("以为您执行操作")
+        plugin.callFunction(
+          function_call.name,
+          session,
+          JSON.parse(function_call.arguments || "{}")
+        );
+        res.send("以为您执行操作");
       } else {
-        res.send(content)
+        res.send(content);
       }
     } else {
-      res.send("你可以说的更详细一点哦")
+      res.send("你可以说的更详细一点哦");
     }
   } else {
     const stream = OpenAIStream(char_res);
     streamToResponse(stream, res);
   }
 });
+
+function validationPlugin(pluginName) {
+  let plugin = null;
+  let functions = null;
+  let preinstall = null;
+  if (pluginName) {
+    plugin = Object.values(chatPlugins).find(({ name }) => name === pluginName);
+    if (plugin) {
+      if (plugin.functions && plugin.functions.length) {
+        functions = plugin.functions;
+      }
+      if (plugin.preinstall) {
+        preinstall = plugin.preinstall;
+      }
+    }
+  }
+  return {
+    plugin,
+    preinstall,
+    functions,
+  };
+}
 
 module.exports = router;

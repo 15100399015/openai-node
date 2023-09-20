@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { ChatList } from "@/chatComponents/chat-list";
 import { ChatPanel } from "@/chatComponents/chat-panel";
 import { EmptyScreen } from "@/chatComponents/empty-screen";
-import { ChatScrollAnchor } from "@/chatComponents/chat-scroll-anchor";
 import { toast } from "react-hot-toast";
 import { Select } from "antd";
 import { useState } from "react";
@@ -33,14 +32,9 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     useChat({
       api: "/api/chat",
       initialMessages,
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
+      headers: { "Content-Type": "application/json; charset=utf-8" },
       id,
-      body: {
-        id,
-        plugin: currentPlugin,
-      },
+      body: { id, plugin: currentPlugin },
       onResponse(response: any) {
         if (response.status === 401) {
           toast.error(response.statusText);
@@ -56,15 +50,8 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         value={currentPlugin}
         allowClear
       />
-      <div className={cn("flex-1 pt-4 md:pt-10 overflow-auto", className)}>
-        {messages.length ? (
-          <>
-            <ChatList messages={messages} />
-            <ChatScrollAnchor trackVisibility={isLoading} />
-          </>
-        ) : (
-          <EmptyScreen />
-        )}
+      <div className={cn("flex-1 pt-10 md:pt-10 overflow-auto", className)}>
+        {messages.length ? <ChatList messages={messages} /> : <EmptyScreen />}
       </div>
       <ChatPanel
         id={id}

@@ -28,11 +28,11 @@ const routes: RouteObject[] = [
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <Assistant />,
       },
       {
-        path: "/chat",
-        element: <Assistant />,
+        path: "/test",
+        element: <Home />,
       },
       {
         path: "/dashboard",
