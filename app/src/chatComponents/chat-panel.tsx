@@ -77,6 +77,7 @@ export function ChatPanel({
             options={plugins}
             onChange={setPlugin}
             value={plugin}
+            placement="topLeft"
             allowClear
           />
           <PromptForm
