@@ -2,10 +2,10 @@ const { definition } = require("./definition")
 
 const scenePlugin = {
     name: "scenePlugin",
-    description: "",
+    description: "用户描述场景，插件会给出场景中需要用到的3d模型有哪些",
     definition: definition,
-    preinstall: `Answer the users question as best as possible 
-The user describes the 3d scene to you, You provided all possible 3D models required to create this scene in its entirety.
+    preinstall: `The user describes the 3d scene to you, You output all possible 3D models required to create this scene in its entirety.
+Your must output the most detailed model list 
 
 You must format your output as a JSON value that adheres to a given "JSON Schema" instance.
 
