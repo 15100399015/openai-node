@@ -4,7 +4,7 @@ import { Configuration, OpenAIApi } from "openai-edge";
 export const openAIllm = new OpenAI({
   temperature: 0,
   configuration: {
-    baseURL: process.env.basePath,
+    baseURL: process.env.OPENAI_BASEURL,
   },
   modelName: "gpt-3.5-turbo",
 });

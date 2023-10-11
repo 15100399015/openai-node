@@ -1,5 +1,4 @@
 import { needModelSchema } from "../../outputParser";
-import { Configuration, OpenAIApi } from "openai-edge";
 import { systemPrompt, userPrompt } from "./prompt";
 import { openAi } from "../../llm";
 

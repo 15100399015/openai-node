@@ -7,11 +7,12 @@ import { systemPrompt, userPrompt } from "./prompt";
 
 export async function dataSourceChain(input: string): Promise<string> {
   await dataSource.initialize();
+  const modelTable = dataSource.getRepository(Model);
   const list = JSON.parse(input) as any[];
 
   for (let i = 0; i < list.length; i++) {
     const model = list[i];
-    const practical = await dataSource.getRepository(Model).find({
+    const practical = await modelTable.find({
       select: ["description", "title", "id"],
       where: { title: Like(`%${model.model}%`) },
       take: 5,
